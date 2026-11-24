@@ -1,0 +1,16 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Python cache (for validator script)
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Exports / temporary charts
+exports/
+*.log
