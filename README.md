@@ -253,6 +253,20 @@ A+ LONG | BTCUSDT (15) | Score: 85/100 @ 91420.5
 ## Referencia Completa de Parámetros (Inputs)
 
 <details>
+<summary><strong>0. Estética y Tema Visual (Minimalista)</strong> (clic para expandir)</summary>
+
+| Parámetro | Default | Descripción |
+|---|---|---|
+| Tema Visual | `"Minimal Light (Monocromo)"` | Optimizado para fondo blanco + velas negras (`Minimal Light (Monocromo)`, `Minimal Light (Acento Sutil)` o `Dark Institutional`) |
+| Mostrar Etiquetas dentro de Cajas (OB/FVG/TR) | `false` | Mantiene cajas limpias sin texto; activalo para ver micro-etiquetas `OB+`/`FVG+`/`TR` |
+| Tamaño Texto Dashboard | `"Pequeño"` | Tipografía compacta (`Pequeño` = `size.tiny` o `Normal` = `size.small`) |
+| Color Cajas Imbalance (FVG) | `#9CA3AF` | Gris neutro minimalista para Fair Value Gaps |
+| Color Tinta Principal (Light) | `#111318` | Negro grafito para líneas de estructura y texto principal |
+| Color Gris Secundario | `#6B7280` | Gris técnico para niveles EQH/EQL, Wyckoff secundarios y etiquetas suaves |
+
+</details>
+
+<details>
 <summary><strong>1. Estructura SMC</strong> (clic para expandir)</summary>
 
 | Parámetro | Default | Descripción |

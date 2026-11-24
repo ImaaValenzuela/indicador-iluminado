@@ -12,38 +12,44 @@ indicator(
 // 1. INPUTS (AGRUPADOS POR MÓDULO)
 // =============================================================================
 
+const string GRP_UI    = "0. Estética y Tema Visual"
 const string GRP_SMC   = "1. Estructura SMC"
 const string GRP_POI   = "2. Liquidez y POIs"
 const string GRP_WYCK  = "3. Motor Wyckoff & VSA"
 const string GRP_CONF  = "4. Confluencia, Dashboard y Alertas"
 
+// --- Grupo 0: Estética y Tema Visual (Minimalista) ---
+string i_uiTheme         = input.string("Minimal Light (Monocromo)", "Tema Visual", options = ["Minimal Light (Monocromo)", "Minimal Light (Acento Sutil)", "Dark Institutional"], group = GRP_UI)
+bool   i_showBoxText     = input.bool(false, "Mostrar Etiquetas dentro de Cajas (OB/FVG/TR)", group = GRP_UI)
+string i_dashTextSize    = input.string("Pequeño", "Tamaño Texto Dashboard", options = ["Pequeño", "Normal"], group = GRP_UI)
+color  i_colImbalance    = input.color(#9CA3AF, "Color Cajas Imbalance (FVG)", group = GRP_UI)
+color  i_colInkCustom    = input.color(#111318, "Color Tinta Principal (Light)", group = GRP_UI)
+color  i_colMutedCustom  = input.color(#6B7280, "Color Gris Secundario", group = GRP_UI)
+
 // --- Grupo 1: Estructura SMC ---
 bool   i_showSwingStruct = input.bool(true, "Mostrar Estructura Swing", group = GRP_SMC)
 int    i_swingLen        = input.int(25, "Lookback Estructura Swing", minval = 5, maxval = 100, group = GRP_SMC)
-bool   i_showIntStruct   = input.bool(true, "Mostrar Estructura Interna", group = GRP_SMC)
+bool   i_showIntStruct   = input.bool(false, "Mostrar Estructura Interna", group = GRP_SMC)
 int    i_intLen          = input.int(5, "Lookback Estructura Interna", minval = 2, maxval = 30, group = GRP_SMC)
 string i_breakMode       = input.string("Close", "Confirmación de Ruptura", options = ["Close", "Wick"], group = GRP_SMC)
 float  i_dispBodyMult    = input.float(1.5, "Desplazamiento: Cuerpo > ATR *", minval = 0.5, maxval = 5.0, step = 0.1, group = GRP_SMC)
 float  i_dispVolMult     = input.float(1.2, "Desplazamiento: Volumen > SMA20 *", minval = 0.5, maxval = 5.0, step = 0.1, group = GRP_SMC)
 bool   i_showPD          = input.bool(true, "Mostrar Zonas Premium / Discount / EQ", group = GRP_SMC)
-int    i_maxStructLines  = input.int(40, "Máx. Líneas de Estructura", minval = 5, maxval = 120, group = GRP_SMC)
-color  i_colBull         = input.color(#089981, "Color Alcista", group = GRP_SMC)
-color  i_colBear         = input.color(#F23645, "Color Bajista", group = GRP_SMC)
-color  i_colEq           = input.color(#787B86, "Color Equilibrium / Neutral", group = GRP_SMC)
+int    i_maxStructLines  = input.int(20, "Máx. Líneas de Estructura", minval = 5, maxval = 120, group = GRP_SMC)
 
 // --- Grupo 2: Liquidez y POIs ---
 bool   i_showEQ          = input.bool(true, "Mostrar Equal Highs / Lows (EQH/EQL)", group = GRP_POI)
 float  i_eqAtrMult       = input.float(0.15, "Tolerancia EQH/EQL (ATR *)", minval = 0.05, maxval = 1.0, step = 0.05, group = GRP_POI)
-int    i_maxEQ           = input.int(15, "Máx. Niveles EQH/EQL", minval = 2, maxval = 50, group = GRP_POI)
+int    i_maxEQ           = input.int(8, "Máx. Niveles EQH/EQL", minval = 2, maxval = 50, group = GRP_POI)
 bool   i_showSweeps      = input.bool(true, "Mostrar Liquidity Sweeps", group = GRP_POI)
-int    i_maxSweeps       = input.int(25, "Máx. Etiquetas de Sweep", minval = 5, maxval = 80, group = GRP_POI)
+int    i_maxSweeps       = input.int(12, "Máx. Etiquetas de Sweep", minval = 5, maxval = 80, group = GRP_POI)
 bool   i_showOB          = input.bool(true, "Mostrar Order Blocks (OB)", group = GRP_POI)
-int    i_maxOB           = input.int(10, "Máx. Order Blocks Activos", minval = 1, maxval = 40, group = GRP_POI)
+int    i_maxOB           = input.int(6, "Máx. Order Blocks Activos", minval = 1, maxval = 40, group = GRP_POI)
 int    i_obLookback      = input.int(15, "Búsqueda Vela OB (Velas)", minval = 3, maxval = 50, group = GRP_POI)
 string i_obMitMode       = input.string("50% Mean Threshold", "Modo Mitigación OB", options = ["Proximal", "50% Mean Threshold", "Distal Invalidation"], group = GRP_POI)
 bool   i_enableBreaker   = input.bool(true, "Convertir OB Invalidado en Breaker Block", group = GRP_POI)
 bool   i_showFVG         = input.bool(true, "Mostrar Fair Value Gaps (FVG)", group = GRP_POI)
-int    i_maxFVG          = input.int(15, "Máx. FVGs Activos", minval = 1, maxval = 50, group = GRP_POI)
+int    i_maxFVG          = input.int(8, "Máx. FVGs Activos", minval = 1, maxval = 50, group = GRP_POI)
 float  i_fvgAtrMult      = input.float(0.25, "Filtro Ruido FVG (ATR *)", minval = 0.05, maxval = 2.0, step = 0.05, group = GRP_POI)
 string i_fvgMitMode      = input.string("100% Fill", "Modo Mitigación FVG", options = ["100% Fill", "50% Fill"], group = GRP_POI)
 
@@ -51,8 +57,8 @@ string i_fvgMitMode      = input.string("100% Fill", "Modo Mitigación FVG", opt
 bool   i_showWyckoff     = input.bool(true, "Mostrar Eventos Wyckoff (SC/AR/ST/Spring/SOS)", group = GRP_WYCK)
 bool   i_showTRBox       = input.bool(true, "Mostrar Cajas de Trading Range (TR)", group = GRP_WYCK)
 bool   i_showVSA         = input.bool(true, "Mostrar Anomalías VSA (Absorción)", group = GRP_WYCK)
-int    i_maxTRHistory    = input.int(4, "Máx. Cajas TR en Historial", minval = 1, maxval = 15, group = GRP_WYCK)
-int    i_maxWyckLabels   = input.int(40, "Máx. Etiquetas Wyckoff", minval = 10, maxval = 120, group = GRP_WYCK)
+int    i_maxTRHistory    = input.int(2, "Máx. Cajas TR en Historial", minval = 1, maxval = 15, group = GRP_WYCK)
+int    i_maxWyckLabels   = input.int(20, "Máx. Etiquetas Wyckoff", minval = 10, maxval = 120, group = GRP_WYCK)
 float  i_vsaAbsRvol      = input.float(1.8, "VSA Absorción: RVOL >", minval = 1.0, maxval = 5.0, step = 0.1, group = GRP_WYCK)
 float  i_climaxRvol      = input.float(2.2, "SC/BC Clímax: RVOL >", minval = 1.2, maxval = 6.0, step = 0.1, group = GRP_WYCK)
 float  i_climaxSpread    = input.float(1.8, "SC/BC Clímax: Spread > ATR *", minval = 1.0, maxval = 5.0, step = 0.1, group = GRP_WYCK)
@@ -67,9 +73,57 @@ int    i_minScore        = input.int(75, "Puntaje Mínimo Señal A+ (0-100)", mi
 int    i_confWindow      = input.int(25, "Ventana de Confluencia (Velas)", minval = 5, maxval = 100, group = GRP_CONF)
 int    i_signalCooldown  = input.int(5, "Cooldown entre Señales A+ (Velas)", minval = 1, maxval = 50, group = GRP_CONF)
 bool   i_showSignals     = input.bool(true, "Mostrar Etiquetas A+ LONG / A+ SHORT", group = GRP_CONF)
-int    i_maxSigLabels    = input.int(30, "Máx. Etiquetas Señal A+", minval = 5, maxval = 100, group = GRP_CONF)
+int    i_maxSigLabels    = input.int(15, "Máx. Etiquetas Señal A+", minval = 5, maxval = 100, group = GRP_CONF)
 bool   i_showDash        = input.bool(true, "Mostrar Dashboard Institucional", group = GRP_CONF)
 bool   i_enableDynAlerts = input.bool(false, "Activar alert() Dinámicas con Puntaje", group = GRP_CONF)
+
+// =============================================================================
+// 1B. PALETA SEMÁNTICA MINIMALISTA (LIGHT MONOCROMO / ACENTO SUTIL / DARK)
+// =============================================================================
+
+bool  isLightMono   = i_uiTheme == "Minimal Light (Monocromo)"
+bool  isLightAccent = i_uiTheme == "Minimal Light (Acento Sutil)"
+bool  isDarkTheme   = i_uiTheme == "Dark Institutional"
+
+color colInk        = isDarkTheme ? #E5E7EB : i_colInkCustom
+color colMuted      = isDarkTheme ? #8B949E : i_colMutedCustom
+color colSubtle     = isDarkTheme ? #4B5563 : #9CA3AF
+
+color i_colBull     = isLightMono ? colInk : isLightAccent ? #166534 : #089981
+color i_colBear     = isLightMono ? #52525B : isLightAccent ? #9F1239 : #F23645
+color i_colEq       = colMuted
+
+color colFvgBg      = color.new(i_colImbalance, isDarkTheme ? 84 : 82)
+color colFvgBorder  = color.new(i_colImbalance, isDarkTheme ? 65 : 68)
+color colFvgText    = color.new(colMuted, 25)
+
+color colObBullBg   = isLightMono ? color.new(colInk, 93) : isLightAccent ? color.new(#166534, 93) : color.new(#089981, 87)
+color colObBullBrd  = isLightMono ? color.new(colInk, 62) : isLightAccent ? color.new(#166534, 58) : color.new(#089981, 40)
+color colObBearBg   = isLightMono ? color.new(#71717A, 91) : isLightAccent ? color.new(#9F1239, 93) : color.new(#F23645, 87)
+color colObBearBrd  = isLightMono ? color.new(#52525B, 58) : isLightAccent ? color.new(#9F1239, 58) : color.new(#F23645, 40)
+
+color colBbBullBrd  = isLightMono ? color.new(colInk, 55) : isLightAccent ? color.new(#166534, 50) : color.new(#2962FF, 35)
+color colBbBearBrd  = isLightMono ? color.new(#52525B, 55) : isLightAccent ? color.new(#9F1239, 50) : color.new(#FF9800, 35)
+
+color colTrBg       = color.new(colSubtle, isDarkTheme ? 95 : 96)
+color colTrBrd      = color.new(colMuted, isDarkTheme ? 58 : 65)
+color colTrLine     = color.new(colMuted, isDarkTheme ? 50 : 58)
+
+color colPdPremBg   = isLightMono ? color.new(colSubtle, 96) : isLightAccent ? color.new(#9F1239, 97) : color.new(#F23645, 95)
+color colPdDiscBg   = isLightMono ? color.new(colInk, 97) : isLightAccent ? color.new(#166534, 97) : color.new(#089981, 95)
+color colPdNoneBrd  = color.new(colSubtle, 100)
+
+color colSigLongBg  = isLightMono ? #111318 : isLightAccent ? #14532D : #089981
+color colSigShortBg = isLightMono ? #3F3F46 : isLightAccent ? #881337 : #F23645
+color colVsaDot     = isDarkTheme ? color.new(#9CA3AF, 35) : color.new(colInk, 45)
+
+color colDashBg     = isDarkTheme ? color.new(#131722, 10) : color.new(#FFFFFF, 4)
+color colDashHead   = isDarkTheme ? color.new(#1E222D, 0) : color.new(#F4F4F5, 0)
+color colDashBrd    = isDarkTheme ? color.new(#2A2E39, 0) : color.new(#E4E4E7, 0)
+color colDashTitle  = isDarkTheme ? color.white : #111318
+color colDashMuted  = isDarkTheme ? #9CA3AF : #71717A
+color colDashVal    = isDarkTheme ? #F3F4F6 : #18181B
+string dashSz       = i_dashTextSize == "Pequeño" ? size.tiny : size.small
 
 // =============================================================================
 // 2. USER DEFINED TYPES (UDTs)
@@ -415,12 +469,12 @@ if barstate.isconfirmed
                         float eqPrice = (swingPH + prev.price) * 0.5
                         line lEq = line.new(
                              x1 = prev.barIdx, y1 = eqPrice, x2 = pivBar, y2 = eqPrice,
-                             color = color.new(i_colBear, 15), style = line.style_dotted, width = 1
+                             color = color.new(colMuted, 40), style = line.style_dotted, width = 1
                          )
                         int midX = int(math.floor((prev.barIdx + pivBar) / 2))
                         label lbEq = label.new(
                              x = midX, y = eqPrice, text = "$$$ EQH",
-                             style = label.style_none, textcolor = i_colBear, size = size.tiny
+                             style = label.style_none, textcolor = colMuted, size = size.tiny
                          )
                         f_pushEQ(eqLevels, EqualLevel.new(eqPrice, prev.barIdx, pivBar, true, false, lEq, lbEq), i_maxEQ)
                     break
@@ -439,12 +493,12 @@ if barstate.isconfirmed
                         float eqPrice = (swingPL + prev.price) * 0.5
                         line lEq = line.new(
                              x1 = prev.barIdx, y1 = eqPrice, x2 = pivBar, y2 = eqPrice,
-                             color = color.new(i_colBull, 15), style = line.style_dotted, width = 1
+                             color = color.new(colMuted, 40), style = line.style_dotted, width = 1
                          )
                         int midX = int(math.floor((prev.barIdx + pivBar) / 2))
                         label lbEq = label.new(
                              x = midX, y = eqPrice, text = "$$$ EQL",
-                             style = label.style_none, textcolor = i_colBull, size = size.tiny
+                             style = label.style_none, textcolor = colMuted, size = size.tiny
                          )
                         f_pushEQ(eqLevels, EqualLevel.new(eqPrice, prev.barIdx, pivBar, false, false, lEq, lbEq), i_maxEQ)
                     break
@@ -463,12 +517,12 @@ if barstate.isconfirmed
                         float eqPrice = (intPH + prev.price) * 0.5
                         line lEq = line.new(
                              x1 = prev.barIdx, y1 = eqPrice, x2 = pivBar, y2 = eqPrice,
-                             color = color.new(i_colBear, 30), style = line.style_dotted, width = 1
+                             color = color.new(colSubtle, 35), style = line.style_dotted, width = 1
                          )
                         int midX = int(math.floor((prev.barIdx + pivBar) / 2))
                         label lbEq = label.new(
                              x = midX, y = eqPrice, text = "$$$",
-                             style = label.style_none, textcolor = i_colBear, size = size.tiny
+                             style = label.style_none, textcolor = colSubtle, size = size.tiny
                          )
                         f_pushEQ(eqLevels, EqualLevel.new(eqPrice, prev.barIdx, pivBar, true, false, lEq, lbEq), i_maxEQ)
                     break
@@ -487,12 +541,12 @@ if barstate.isconfirmed
                         float eqPrice = (intPL + prev.price) * 0.5
                         line lEq = line.new(
                              x1 = prev.barIdx, y1 = eqPrice, x2 = pivBar, y2 = eqPrice,
-                             color = color.new(i_colBull, 30), style = line.style_dotted, width = 1
+                             color = color.new(colSubtle, 35), style = line.style_dotted, width = 1
                          )
                         int midX = int(math.floor((prev.barIdx + pivBar) / 2))
                         label lbEq = label.new(
                              x = midX, y = eqPrice, text = "$$$",
-                             style = label.style_none, textcolor = i_colBull, size = size.tiny
+                             style = label.style_none, textcolor = colSubtle, size = size.tiny
                          )
                         f_pushEQ(eqLevels, EqualLevel.new(eqPrice, prev.barIdx, pivBar, false, false, lEq, lbEq), i_maxEQ)
                     break
@@ -550,19 +604,17 @@ if barstate.isconfirmed
 
     if i_showSweeps and bullSweepNow
         label lbSw = label.new(
-             x = bar_index, y = low, text = "⚡ Sweep",
-             style = label.style_label_up, color = color.new(i_colBull, 75),
-             textcolor = i_colBull, size = size.tiny,
-             tooltip = "Barrido de Liquidez Alcista (SSL Sweep)"
+             x = bar_index, y = low - (0.12 * nz(atr14)), text = "×",
+             style = label.style_none, textcolor = i_colBull, size = size.tiny,
+             tooltip = "Liquidity Sweep Alcista (SSL)"
          )
         f_pushLabel(sweepLabels, lbSw, i_maxSweeps)
 
     if i_showSweeps and bearSweepNow
         label lbSw = label.new(
-             x = bar_index, y = high, text = "⚡ Sweep",
-             style = label.style_label_down, color = color.new(i_colBear, 75),
-             textcolor = i_colBear, size = size.tiny,
-             tooltip = "Barrido de Liquidez Bajista (BSL Sweep)"
+             x = bar_index, y = high + (0.12 * nz(atr14)), text = "×",
+             style = label.style_none, textcolor = i_colBear, size = size.tiny,
+             tooltip = "Liquidity Sweep Bajista (BSL)"
          )
         f_pushLabel(sweepLabels, lbSw, i_maxSweeps)
 
@@ -600,14 +652,15 @@ if barstate.isconfirmed
                 line lS = line.new(
                      x1 = lastSwingHigh.barIdx, y1 = lastSwingHigh.price,
                      x2 = bar_index, y2 = lastSwingHigh.price,
-                     color = i_colBull, style = isMSS ? line.style_solid : line.style_dashed,
-                     width = isMSS ? 2 : 1
+                     color = color.new(i_colBull, isMSS ? 15 : 40),
+                     style = isMSS ? line.style_solid : line.style_dashed,
+                     width = 1
                  )
                 int midX = int(math.floor((lastSwingHigh.barIdx + bar_index) / 2))
                 label lbS = label.new(
                      x = midX, y = lastSwingHigh.price, text = tag,
-                     style = label.style_none, textcolor = i_colBull,
-                     size = isMSS ? size.small : size.tiny
+                     style = label.style_none, textcolor = color.new(i_colBull, isMSS ? 0 : 20),
+                     size = size.tiny
                  )
                 f_pushStructDrawing(structDraws, StructDrawing.new(lS, lbS), i_maxStructLines)
 
@@ -632,14 +685,15 @@ if barstate.isconfirmed
                 line lS = line.new(
                      x1 = lastSwingLow.barIdx, y1 = lastSwingLow.price,
                      x2 = bar_index, y2 = lastSwingLow.price,
-                     color = i_colBear, style = isMSS ? line.style_solid : line.style_dashed,
-                     width = isMSS ? 2 : 1
+                     color = color.new(i_colBear, isMSS ? 15 : 40),
+                     style = isMSS ? line.style_solid : line.style_dashed,
+                     width = 1
                  )
                 int midX = int(math.floor((lastSwingLow.barIdx + bar_index) / 2))
                 label lbS = label.new(
                      x = midX, y = lastSwingLow.price, text = tag,
-                     style = label.style_none, textcolor = i_colBear,
-                     size = isMSS ? size.small : size.tiny
+                     style = label.style_none, textcolor = color.new(i_colBear, isMSS ? 0 : 20),
+                     size = size.tiny
                  )
                 f_pushStructDrawing(structDraws, StructDrawing.new(lS, lbS), i_maxStructLines)
 
@@ -664,12 +718,12 @@ if barstate.isconfirmed
                 line lI = line.new(
                      x1 = lastIntHigh.barIdx, y1 = lastIntHigh.price,
                      x2 = bar_index, y2 = lastIntHigh.price,
-                     color = color.new(i_colBull, 35), style = line.style_dotted, width = 1
+                     color = color.new(colSubtle, 40), style = line.style_dotted, width = 1
                  )
                 int midX = int(math.floor((lastIntHigh.barIdx + bar_index) / 2))
                 label lbI = label.new(
                      x = midX, y = lastIntHigh.price, text = tag,
-                     style = label.style_none, textcolor = color.new(i_colBull, 20), size = size.tiny
+                     style = label.style_none, textcolor = colSubtle, size = size.tiny
                  )
                 f_pushStructDrawing(structDraws, StructDrawing.new(lI, lbI), i_maxStructLines)
 
@@ -694,17 +748,17 @@ if barstate.isconfirmed
                 line lI = line.new(
                      x1 = lastIntLow.barIdx, y1 = lastIntLow.price,
                      x2 = bar_index, y2 = lastIntLow.price,
-                     color = color.new(i_colBear, 35), style = line.style_dotted, width = 1
+                     color = color.new(colSubtle, 40), style = line.style_dotted, width = 1
                  )
                 int midX = int(math.floor((lastIntLow.barIdx + bar_index) / 2))
                 label lbI = label.new(
                      x = midX, y = lastIntLow.price, text = tag,
-                     style = label.style_none, textcolor = color.new(i_colBear, 20), size = size.tiny
+                     style = label.style_none, textcolor = colSubtle, size = size.tiny
                  )
                 f_pushStructDrawing(structDraws, StructDrawing.new(lI, lbI), i_maxStructLines)
 
     // -------------------------------------------------------------------------
-    // MÓDULO 1C: ZONAS PREMIUM / DISCOUNT / EQUILIBRIUM
+    // MÓDULO 1C: ZONAS PREMIUM / DISCOUNT / EQUILIBRIUM (MINIMALISTA)
     // -------------------------------------------------------------------------
 
     if not na(lastSwingHigh) and not na(lastSwingLow) and lastSwingHigh.price > lastSwingLow.price
@@ -712,14 +766,14 @@ if barstate.isconfirmed
         pdLow  := lastSwingLow.price
         pdEq   := (pdHigh + pdLow) * 0.5
         int pdLeft  = math.min(lastSwingHigh.barIdx, lastSwingLow.barIdx)
-        int pdRight = bar_index + 8
+        int pdRight = bar_index + 4
 
         if i_showPD
             if na(pdPremBox)
                 pdPremBox := box.new(
                      left = pdLeft, top = pdHigh, right = pdRight, bottom = pdEq,
-                     border_color = color.new(i_colBear, 75), border_width = 1,
-                     bgcolor = color.new(i_colBear, 93)
+                     border_color = colPdNoneBrd, border_width = 0,
+                     bgcolor = colPdPremBg
                  )
             else
                 box.set_lefttop(pdPremBox, pdLeft, pdHigh)
@@ -728,8 +782,8 @@ if barstate.isconfirmed
             if na(pdDiscBox)
                 pdDiscBox := box.new(
                      left = pdLeft, top = pdEq, right = pdRight, bottom = pdLow,
-                     border_color = color.new(i_colBull, 75), border_width = 1,
-                     bgcolor = color.new(i_colBull, 93)
+                     border_color = colPdNoneBrd, border_width = 0,
+                     bgcolor = colPdDiscBg
                  )
             else
                 box.set_lefttop(pdDiscBox, pdLeft, pdEq)
@@ -738,7 +792,7 @@ if barstate.isconfirmed
             if na(pdEqLine)
                 pdEqLine := line.new(
                      x1 = pdLeft, y1 = pdEq, x2 = pdRight, y2 = pdEq,
-                     color = color.new(i_colEq, 30), style = line.style_dashed, width = 1
+                     color = color.new(colSubtle, 35), style = line.style_dotted, width = 1
                  )
             else
                 line.set_xy1(pdEqLine, pdLeft, pdEq)
@@ -747,15 +801,15 @@ if barstate.isconfirmed
             if na(pdPremLbl)
                 pdPremLbl := label.new(
                      x = pdRight, y = pdHigh, text = "Premium",
-                     style = label.style_none, textcolor = color.new(i_colBear, 25), size = size.tiny
+                     style = label.style_none, textcolor = color.new(colMuted, 25), size = size.tiny
                  )
             else
                 label.set_xy(pdPremLbl, pdRight, pdHigh)
 
             if na(pdEqLbl)
                 pdEqLbl := label.new(
-                     x = pdRight, y = pdEq, text = "EQ 50%",
-                     style = label.style_none, textcolor = i_colEq, size = size.tiny
+                     x = pdRight, y = pdEq, text = "50%",
+                     style = label.style_none, textcolor = color.new(colMuted, 20), size = size.tiny
                  )
             else
                 label.set_xy(pdEqLbl, pdRight, pdEq)
@@ -763,7 +817,7 @@ if barstate.isconfirmed
             if na(pdDiscLbl)
                 pdDiscLbl := label.new(
                      x = pdRight, y = pdLow, text = "Discount",
-                     style = label.style_none, textcolor = color.new(i_colBull, 25), size = size.tiny
+                     style = label.style_none, textcolor = color.new(colMuted, 25), size = size.tiny
                  )
             else
                 label.set_xy(pdDiscLbl, pdRight, pdLow)
@@ -787,10 +841,10 @@ if barstate.isconfirmed
                 float obBot = low[obOffset]
                 float obMid = (obTop + obBot) * 0.5
                 box bOb = i_showOB ? box.new(
-                     left = originBar, top = obTop, right = bar_index + 4, bottom = obBot,
-                     border_color = color.new(i_colBull, 25), border_width = 1,
-                     bgcolor = color.new(i_colBull, 84),
-                     text = "OB+", text_size = size.tiny, text_color = i_colBull,
+                     left = originBar, top = obTop, right = bar_index + 2, bottom = obBot,
+                     border_color = colObBullBrd, border_width = 1,
+                     bgcolor = colObBullBg,
+                     text = i_showBoxText ? "OB+" : "", text_size = size.tiny, text_color = color.new(i_colBull, 25),
                      text_halign = text.align_right, text_valign = text.align_center
                  ) : box(na)
                 f_pushOB(obList, OrderBlock.new(obTop, obBot, obMid, originBar, true, false, false, false, bOb), i_maxOB)
@@ -808,10 +862,10 @@ if barstate.isconfirmed
                 float obBot = low[obOffset]
                 float obMid = (obTop + obBot) * 0.5
                 box bOb = i_showOB ? box.new(
-                     left = originBar, top = obTop, right = bar_index + 4, bottom = obBot,
-                     border_color = color.new(i_colBear, 25), border_width = 1,
-                     bgcolor = color.new(i_colBear, 84),
-                     text = "OB-", text_size = size.tiny, text_color = i_colBear,
+                     left = originBar, top = obTop, right = bar_index + 2, bottom = obBot,
+                     border_color = colObBearBrd, border_width = 1,
+                     bgcolor = colObBearBg,
+                     text = i_showBoxText ? "OB-" : "", text_size = size.tiny, text_color = color.new(i_colBear, 25),
                      text_halign = text.align_right, text_valign = text.align_center
                  ) : box(na)
                 f_pushOB(obList, OrderBlock.new(obTop, obBot, obMid, originBar, false, false, false, false, bOb), i_maxOB)
@@ -822,7 +876,7 @@ if barstate.isconfirmed
             OrderBlock ob = array.get(obList, i)
             if bar_index > ob.originBar
                 if not na(ob.boxId)
-                    box.set_right(ob.boxId, bar_index + 4)
+                    box.set_right(ob.boxId, bar_index + 2)
 
                 // Detectar si el precio entra en el OB activo (para alerta y confluencia)
                 bool touchingOB = low <= ob.top and high >= ob.bottom
@@ -842,12 +896,12 @@ if barstate.isconfirmed
                         ob.isBull    := not ob.isBull
                         ob.isBreaker := true
                         if not na(ob.boxId)
-                            color bbCol = ob.isBull ? color.new(#2962FF, 0) : color.new(#FF9800, 0)
-                            box.set_border_color(ob.boxId, color.new(bbCol, 20))
-                            box.set_border_style(ob.boxId, line.style_dashed)
-                            box.set_bgcolor(ob.boxId, color.new(bbCol, 85))
-                            box.set_text(ob.boxId, ob.isBull ? "BB+" : "BB-")
-                            box.set_text_color(ob.boxId, bbCol)
+                            color bbBrd = ob.isBull ? colBbBullBrd : colBbBearBrd
+                            box.set_border_color(ob.boxId, bbBrd)
+                            box.set_border_style(ob.boxId, line.style_dotted)
+                            box.set_bgcolor(ob.boxId, color.new(colSubtle, 95))
+                            box.set_text(ob.boxId, i_showBoxText ? (ob.isBull ? "BB+" : "BB-") : "")
+                            box.set_text_color(ob.boxId, colMuted)
                     else
                         ob.mitigated := true
                         if not na(ob.boxId)
@@ -868,7 +922,7 @@ if barstate.isconfirmed
                         array.remove(obList, i)
 
     // -------------------------------------------------------------------------
-    // MÓDULO 2C: FAIR VALUE GAPS (FVG) CON FILTRO ATR Y RECORTE DINÁMICO
+    // MÓDULO 2C: FAIR VALUE GAPS (FVG) — CAJAS GRISES LIMPIAS + RECORTE DINÁMICO
     // -------------------------------------------------------------------------
 
     if bar_index >= 2 and not na(atr14) and atr14 > 0.0
@@ -880,10 +934,10 @@ if barstate.isconfirmed
             float fBot = high[2]
             float fMid = (fTop + fBot) * 0.5
             box bFvg = i_showFVG ? box.new(
-                 left = bar_index - 1, top = fTop, right = bar_index + 3, bottom = fBot,
-                 border_color = color.new(i_colBull, 60), border_width = 1,
-                 bgcolor = color.new(i_colBull, 88),
-                 text = "FVG+", text_size = size.tiny, text_color = color.new(i_colBull, 20),
+                 left = bar_index - 1, top = fTop, right = bar_index + 2, bottom = fBot,
+                 border_color = colFvgBorder, border_width = 1,
+                 bgcolor = colFvgBg,
+                 text = i_showBoxText ? "FVG+" : "", text_size = size.tiny, text_color = colFvgText,
                  text_halign = text.align_right, text_valign = text.align_center
              ) : box(na)
             f_pushFVG(fvgList, FVG.new(fTop, fBot, fMid, bar_index - 1, true, false, false, bFvg), i_maxFVG)
@@ -894,10 +948,10 @@ if barstate.isconfirmed
             float fBot = high
             float fMid = (fTop + fBot) * 0.5
             box bFvg = i_showFVG ? box.new(
-                 left = bar_index - 1, top = fTop, right = bar_index + 3, bottom = fBot,
-                 border_color = color.new(i_colBear, 60), border_width = 1,
-                 bgcolor = color.new(i_colBear, 88),
-                 text = "FVG-", text_size = size.tiny, text_color = color.new(i_colBear, 20),
+                 left = bar_index - 1, top = fTop, right = bar_index + 2, bottom = fBot,
+                 border_color = colFvgBorder, border_width = 1,
+                 bgcolor = colFvgBg,
+                 text = i_showBoxText ? "FVG-" : "", text_size = size.tiny, text_color = colFvgText,
                  text_halign = text.align_right, text_valign = text.align_center
              ) : box(na)
             f_pushFVG(fvgList, FVG.new(fTop, fBot, fMid, bar_index - 1, false, false, false, bFvg), i_maxFVG)
@@ -908,7 +962,7 @@ if barstate.isconfirmed
             FVG f = array.get(fvgList, i)
             if bar_index > f.originBar + 1
                 if not na(f.boxId)
-                    box.set_right(f.boxId, bar_index + 3)
+                    box.set_right(f.boxId, bar_index + 2)
 
                 if f.isBull
                     if low <= f.top and high >= f.bottom
@@ -996,9 +1050,8 @@ if barstate.isconfirmed
             tr.botLine         := na
             if i_showWyckoff
                 label lbSC = label.new(
-                     x = scBar, y = scLow, text = "SC",
-                     style = label.style_label_up, color = color.new(#2962FF, 15),
-                     textcolor = color.white, size = size.tiny,
+                     x = scBar, y = scLow - (0.16 * nz(atr14)), text = "SC",
+                     style = label.style_none, textcolor = colMuted, size = size.tiny,
                      tooltip = "Selling Climax (Wyckoff Acumulación) | RVOL: " + str.tostring(rvol, "#.##")
                  )
                 f_pushLabel(wyckLabels, lbSC, i_maxWyckLabels)
@@ -1028,9 +1081,8 @@ if barstate.isconfirmed
             tr.botLine         := na
             if i_showWyckoff
                 label lbBC = label.new(
-                     x = bcBar, y = bcHigh, text = "BC",
-                     style = label.style_label_down, color = color.new(#FF6D00, 15),
-                     textcolor = color.white, size = size.tiny,
+                     x = bcBar, y = bcHigh + (0.16 * nz(atr14)), text = "BC",
+                     style = label.style_none, textcolor = colMuted, size = size.tiny,
                      tooltip = "Buying Climax (Wyckoff Distribución) | RVOL: " + str.tostring(rvol, "#.##")
                  )
                 f_pushLabel(wyckLabels, lbBC, i_maxWyckLabels)
@@ -1059,23 +1111,22 @@ if barstate.isconfirmed
                     tr.phase := 2
                     if i_showWyckoff
                         label lbAR = label.new(
-                             x = arCandBar, y = arCandPrice, text = "AR",
-                             style = label.style_label_down, color = color.new(#2962FF, 25),
-                             textcolor = color.white, size = size.tiny,
+                             x = arCandBar, y = arCandPrice + (0.16 * nz(atr14)), text = "AR",
+                             style = label.style_none, textcolor = colMuted, size = size.tiny,
                              tooltip = "Automatic Rally — Límite Superior del Trading Range"
                          )
                         f_pushLabel(wyckLabels, lbAR, i_maxWyckLabels)
                     if i_showTRBox
                         tr.trBox := box.new(
                              left = tr.startBar, top = tr.top, right = bar_index + 2, bottom = tr.bottom,
-                             border_color = color.new(#2962FF, 55), border_width = 1, border_style = line.style_dashed,
-                             bgcolor = color.new(#2962FF, 93),
-                             text = "TR Acumulación", text_size = size.tiny, text_color = color.new(#2962FF, 25),
+                             border_color = colTrBrd, border_width = 1, border_style = line.style_dotted,
+                             bgcolor = colTrBg,
+                             text = i_showBoxText ? "TR Acum." : "", text_size = size.tiny, text_color = colMuted,
                              text_halign = text.align_left, text_valign = text.align_top
                          )
                         f_pushBox(trHistBoxes, tr.trBox, i_maxTRHistory)
-                        tr.topLine := line.new(tr.startBar, tr.top, bar_index + 2, tr.top, color = color.new(#2962FF, 40), style = line.style_dashed)
-                        tr.botLine := line.new(tr.startBar, tr.bottom, bar_index + 2, tr.bottom, color = color.new(#2962FF, 40), style = line.style_dashed)
+                        tr.topLine := line.new(tr.startBar, tr.top, bar_index + 2, tr.top, color = colTrLine, style = line.style_dashed)
+                        tr.botLine := line.new(tr.startBar, tr.bottom, bar_index + 2, tr.bottom, color = colTrLine, style = line.style_dashed)
                         f_pushLine(trHistLines, tr.topLine, i_maxTRHistory * 2)
                         f_pushLine(trHistLines, tr.botLine, i_maxTRHistory * 2)
         else if tr.bias == -1
@@ -1099,23 +1150,22 @@ if barstate.isconfirmed
                     tr.phase  := 2
                     if i_showWyckoff
                         label lbAR = label.new(
-                             x = arCandBar, y = arCandPrice, text = "AR",
-                             style = label.style_label_up, color = color.new(#FF6D00, 25),
-                             textcolor = color.white, size = size.tiny,
+                             x = arCandBar, y = arCandPrice - (0.16 * nz(atr14)), text = "AR",
+                             style = label.style_none, textcolor = colMuted, size = size.tiny,
                              tooltip = "Automatic Reaction — Límite Inferior del Trading Range"
                          )
                         f_pushLabel(wyckLabels, lbAR, i_maxWyckLabels)
                     if i_showTRBox
                         tr.trBox := box.new(
                              left = tr.startBar, top = tr.top, right = bar_index + 2, bottom = tr.bottom,
-                             border_color = color.new(#FF6D00, 55), border_width = 1, border_style = line.style_dashed,
-                             bgcolor = color.new(#FF6D00, 93),
-                             text = "TR Distribución", text_size = size.tiny, text_color = color.new(#FF6D00, 25),
+                             border_color = colTrBrd, border_width = 1, border_style = line.style_dotted,
+                             bgcolor = colTrBg,
+                             text = i_showBoxText ? "TR Dist." : "", text_size = size.tiny, text_color = colMuted,
                              text_halign = text.align_left, text_valign = text.align_bottom
                          )
                         f_pushBox(trHistBoxes, tr.trBox, i_maxTRHistory)
-                        tr.topLine := line.new(tr.startBar, tr.top, bar_index + 2, tr.top, color = color.new(#FF6D00, 40), style = line.style_dashed)
-                        tr.botLine := line.new(tr.startBar, tr.bottom, bar_index + 2, tr.bottom, color = color.new(#FF6D00, 40), style = line.style_dashed)
+                        tr.topLine := line.new(tr.startBar, tr.top, bar_index + 2, tr.top, color = colTrLine, style = line.style_dashed)
+                        tr.botLine := line.new(tr.startBar, tr.bottom, bar_index + 2, tr.bottom, color = colTrLine, style = line.style_dashed)
                         f_pushLine(trHistLines, tr.topLine, i_maxTRHistory * 2)
                         f_pushLine(trHistLines, tr.botLine, i_maxTRHistory * 2)
 
@@ -1146,9 +1196,8 @@ if barstate.isconfirmed
                     lastBullManipBar  := bar_index
                     if i_showWyckoff
                         label lbSp = label.new(
-                             x = bar_index, y = math.min(low, tr.pendingExtreme), text = "SPRING",
-                             style = label.style_label_up, color = i_colBull,
-                             textcolor = color.white, size = size.small,
+                             x = bar_index, y = math.min(low, tr.pendingExtreme) - (0.18 * nz(atr14)), text = "SPRING",
+                             style = label.style_none, textcolor = i_colBull, size = size.tiny,
                              tooltip = "Wyckoff Spring (Recuperación en 1-2 velas dentro del TR)"
                          )
                         f_pushLabel(wyckLabels, lbSp, i_maxWyckLabels)
@@ -1168,9 +1217,8 @@ if barstate.isconfirmed
                     lastBullManipBar := bar_index
                     if i_showWyckoff
                         label lbSp = label.new(
-                             x = bar_index, y = low, text = "SPRING",
-                             style = label.style_label_up, color = i_colBull,
-                             textcolor = color.white, size = size.small,
+                             x = bar_index, y = low - (0.18 * nz(atr14)), text = "SPRING",
+                             style = label.style_none, textcolor = i_colBull, size = size.tiny,
                              tooltip = "Wyckoff Spring (Barrido bajo TR y cierre dentro)"
                          )
                         f_pushLabel(wyckLabels, lbSp, i_maxWyckLabels)
@@ -1190,9 +1238,8 @@ if barstate.isconfirmed
                     lastBullVolConfBar := bar_index
                     if i_showWyckoff
                         label lbST = label.new(
-                             x = bar_index, y = low, text = "ST",
-                             style = label.style_label_up, color = color.new(#2962FF, 30),
-                             textcolor = color.white, size = size.tiny,
+                             x = bar_index, y = low - (0.16 * nz(atr14)), text = "ST",
+                             style = label.style_none, textcolor = colMuted, size = size.tiny,
                              tooltip = "Secondary Test (Bajo Volumen) | RVOL: " + str.tostring(rvol, "#.##")
                          )
                         f_pushLabel(wyckLabels, lbST, i_maxWyckLabels)
@@ -1207,9 +1254,8 @@ if barstate.isconfirmed
                 lastBullStructBar := bar_index
                 if i_showWyckoff
                     label lbSOS = label.new(
-                         x = bar_index, y = high, text = "SOS",
-                         style = label.style_label_down, color = i_colBull,
-                         textcolor = color.white, size = size.small,
+                         x = bar_index, y = high + (0.18 * nz(atr14)), text = "SOS",
+                         style = label.style_none, textcolor = i_colBull, size = size.tiny,
                          tooltip = "Sign of Strength | Spread: " + str.tostring(relSpread, "#.##") + "x ATR | RVOL: " + str.tostring(rvol, "#.##")
                      )
                     f_pushLabel(wyckLabels, lbSOS, i_maxWyckLabels)
@@ -1235,9 +1281,8 @@ if barstate.isconfirmed
                     lastBearManipBar  := bar_index
                     if i_showWyckoff
                         label lbUt = label.new(
-                             x = bar_index, y = math.max(high, tr.pendingExtreme), text = "UTAD",
-                             style = label.style_label_down, color = i_colBear,
-                             textcolor = color.white, size = size.small,
+                             x = bar_index, y = math.max(high, tr.pendingExtreme) + (0.18 * nz(atr14)), text = "UTAD",
+                             style = label.style_none, textcolor = i_colBear, size = size.tiny,
                              tooltip = "Wyckoff UTAD (Recuperación en 1-2 velas dentro del TR)"
                          )
                         f_pushLabel(wyckLabels, lbUt, i_maxWyckLabels)
@@ -1256,9 +1301,8 @@ if barstate.isconfirmed
                     lastBearManipBar := bar_index
                     if i_showWyckoff
                         label lbUt = label.new(
-                             x = bar_index, y = high, text = "UTAD",
-                             style = label.style_label_down, color = i_colBear,
-                             textcolor = color.white, size = size.small,
+                             x = bar_index, y = high + (0.18 * nz(atr14)), text = "UTAD",
+                             style = label.style_none, textcolor = i_colBear, size = size.tiny,
                              tooltip = "Wyckoff UTAD (Barrido sobre TR y cierre dentro)"
                          )
                         f_pushLabel(wyckLabels, lbUt, i_maxWyckLabels)
@@ -1278,9 +1322,8 @@ if barstate.isconfirmed
                     lastBearVolConfBar := bar_index
                     if i_showWyckoff
                         label lbST = label.new(
-                             x = bar_index, y = high, text = "ST",
-                             style = label.style_label_down, color = color.new(#FF6D00, 30),
-                             textcolor = color.white, size = size.tiny,
+                             x = bar_index, y = high + (0.16 * nz(atr14)), text = "ST",
+                             style = label.style_none, textcolor = colMuted, size = size.tiny,
                              tooltip = "Secondary Test (Bajo Volumen) | RVOL: " + str.tostring(rvol, "#.##")
                          )
                         f_pushLabel(wyckLabels, lbST, i_maxWyckLabels)
@@ -1295,9 +1338,8 @@ if barstate.isconfirmed
                 lastBearStructBar := bar_index
                 if i_showWyckoff
                     label lbSOW = label.new(
-                         x = bar_index, y = low, text = "SOW",
-                         style = label.style_label_up, color = i_colBear,
-                         textcolor = color.white, size = size.small,
+                         x = bar_index, y = low - (0.18 * nz(atr14)), text = "SOW",
+                         style = label.style_none, textcolor = i_colBear, size = size.tiny,
                          tooltip = "Sign of Weakness | Spread: " + str.tostring(relSpread, "#.##") + "x ATR | RVOL: " + str.tostring(rvol, "#.##")
                      )
                     f_pushLabel(wyckLabels, lbSOW, i_maxWyckLabels)
@@ -1332,9 +1374,8 @@ if barstate.isconfirmed
                     lastBullVolConfBar := bar_index
                     if i_showWyckoff
                         label lbLPS = label.new(
-                             x = bar_index, y = low, text = "LPS",
-                             style = label.style_label_up, color = color.new(i_colBull, 10),
-                             textcolor = color.white, size = size.small,
+                             x = bar_index, y = low - (0.16 * nz(atr14)), text = "LPS",
+                             style = label.style_none, textcolor = colMuted, size = size.tiny,
                              tooltip = "Last Point of Support | RVOL: " + str.tostring(rvol, "#.##")
                          )
                         f_pushLabel(wyckLabels, lbLPS, i_maxWyckLabels)
@@ -1353,9 +1394,8 @@ if barstate.isconfirmed
                     lastBearVolConfBar := bar_index
                     if i_showWyckoff
                         label lbLPSY = label.new(
-                             x = bar_index, y = high, text = "LPSY",
-                             style = label.style_label_down, color = color.new(i_colBear, 10),
-                             textcolor = color.white, size = size.small,
+                             x = bar_index, y = high + (0.16 * nz(atr14)), text = "LPSY",
+                             style = label.style_none, textcolor = colMuted, size = size.tiny,
                              tooltip = "Last Point of Supply | RVOL: " + str.tostring(rvol, "#.##")
                          )
                         f_pushLabel(wyckLabels, lbLPSY, i_maxWyckLabels)
@@ -1420,10 +1460,10 @@ if barstate.isconfirmed
                  "\n• Volumen (VSA/ST/LPS): +" + str.tostring(ptsVolL)
              )
             label lbSigL = label.new(
-                 x = bar_index, y = low - (0.35 * nz(atr14)),
-                 text = "A+ LONG (" + str.tostring(liveScoreLong) + ")",
-                 style = label.style_label_up, color = i_colBull,
-                 textcolor = color.white, size = size.normal, tooltip = tipL
+                 x = bar_index, y = low - (0.30 * nz(atr14)),
+                 text = "A+ LONG · " + str.tostring(liveScoreLong),
+                 style = label.style_label_up, color = colSigLongBg,
+                 textcolor = color.white, size = size.small, tooltip = tipL
              )
             f_pushLabel(sigLabels, lbSigL, i_maxSigLabels)
         if i_enableDynAlerts
@@ -1444,68 +1484,64 @@ if barstate.isconfirmed
                  "\n• Volumen (VSA/ST/LPSY): +" + str.tostring(ptsVolS)
              )
             label lbSigS = label.new(
-                 x = bar_index, y = high + (0.35 * nz(atr14)),
-                 text = "A+ SHORT (" + str.tostring(liveScoreShort) + ")",
-                 style = label.style_label_down, color = i_colBear,
-                 textcolor = color.white, size = size.normal, tooltip = tipS
+                 x = bar_index, y = high + (0.30 * nz(atr14)),
+                 text = "A+ SHORT · " + str.tostring(liveScoreShort),
+                 style = label.style_label_down, color = colSigShortBg,
+                 textcolor = color.white, size = size.small, tooltip = tipS
              )
             f_pushLabel(sigLabels, lbSigS, i_maxSigLabels)
         if i_enableDynAlerts
             alert("A+ SHORT | " + syminfo.ticker + " (" + timeframe.period + ") | Score: " + str.tostring(liveScoreShort) + "/100 @ " + str.tostring(close), alert.freq_once_per_bar_close)
 
 // =============================================================================
-// 7. VISUALIZACIÓN VSA (PLOTSHAPE GLOBAL — NO CONSUME LÍMITE DE LABELS)
+// 7. VISUALIZACIÓN VSA (PLOTSHAPE GLOBAL — PUNTOS MINIMALISTAS)
 // =============================================================================
 
 plotshape(
      i_showVSA and vsaBullAbs,
      title     = "VSA Absorción Alcista",
-     style     = shape.diamond,
+     style     = shape.circle,
      location  = location.belowbar,
-     color     = color.new(i_colBull, 15),
+     color     = colVsaDot,
      size      = size.tiny
  )
 
 plotshape(
      i_showVSA and vsaBearAbs,
      title     = "VSA Absorción Bajista",
-     style     = shape.diamond,
+     style     = shape.circle,
      location  = location.abovebar,
-     color     = color.new(i_colBear, 15),
+     color     = colVsaDot,
      size      = size.tiny
  )
 
 // =============================================================================
-// 8. DASHBOARD INSTITUCIONAL (ESQUINA SUPERIOR DERECHA)
+// 8. DASHBOARD INSTITUCIONAL (MINIMALISTA LIGHT / ADAPTATIVO)
 // =============================================================================
 
 var table dash = table.new(
      position     = position.top_right,
      columns      = 2,
      rows         = 8,
-     bgcolor      = color.new(#131722, 12),
+     bgcolor      = colDashBg,
      border_width = 1,
-     border_color = color.new(#2A2E39, 0),
+     border_color = colDashBrd,
      frame_width  = 1,
-     frame_color  = color.new(#363A45, 0)
+     frame_color  = colDashBrd
  )
 
 if barstate.isfirst
     table.merge_cells(dash, 0, 0, 1, 0)
 
 if i_showDash and barstate.islast
-    color bgHeader = color.new(#1E222D, 0)
-    color bgCell   = color.new(#131722, 15)
-    color txtMuted = color.new(#B2B5BE, 0)
-
     // Zona actual Premium / Discount / Equilibrium
     string zoneTxt = "N/A"
-    color  zoneCol = i_colEq
+    color  zoneCol = colDashMuted
     if not na(pdHigh) and not na(pdLow) and not na(pdEq) and pdHigh > pdLow
         float eqBand = (pdHigh - pdLow) * 0.025
         if math.abs(close - pdEq) <= eqBand
             zoneTxt := "Equilibrium"
-            zoneCol := i_colEq
+            zoneCol := colDashMuted
         else if close > pdEq
             zoneTxt := "Premium"
             zoneCol := i_colBear
@@ -1514,39 +1550,38 @@ if i_showDash and barstate.islast
             zoneCol := i_colBull
 
     string wyckTxt = tr.active ? f_wyckoffStateLabel(tr.phase, tr.bias) : "Tendencia"
-    color  wyckCol = tr.active ? (tr.bias == 1 ? i_colBull : i_colBear) : txtMuted
+    color  wyckCol = tr.active ? (tr.bias == 1 ? i_colBull : i_colBear) : colDashMuted
 
-    color swingCol = swingTrend == 1 ? i_colBull : swingTrend == -1 ? i_colBear : i_colEq
-    color intCol   = intTrend == 1 ? i_colBull : intTrend == -1 ? i_colBear : i_colEq
-    color scoreCol = lastConfluenceScore >= i_minScore ? (lastConfluenceDir == "LONG" ? i_colBull : i_colBear) : txtMuted
+    color swingCol = swingTrend == 1 ? i_colBull : swingTrend == -1 ? i_colBear : colDashMuted
+    color intCol   = intTrend == 1 ? i_colBull : intTrend == -1 ? i_colBear : colDashMuted
+    color scoreCol = lastConfluenceScore >= i_minScore ? (lastConfluenceDir == "LONG" ? i_colBull : i_colBear) : colDashMuted
 
-    string lastScoreStr = lastConfluenceScore > 0 ? (str.tostring(lastConfluenceScore) + " / 100 (" + lastConfluenceDir + ")") : "0 / 100"
+    string lastScoreStr = lastConfluenceScore > 0 ? (str.tostring(lastConfluenceScore) + " / 100 · " + lastConfluenceDir) : "—"
+    string liveScoreStr = "L " + str.tostring(liveScoreLong) + " · S " + str.tostring(liveScoreShort)
+    string poiStr       = "OB " + str.tostring(array.size(obList)) + " · FVG " + str.tostring(array.size(fvgList)) + " · " + str.tostring(rvol, "#.#") + "x"
 
-    string liveScoreStr = "L: " + str.tostring(liveScoreLong) + "  |  S: " + str.tostring(liveScoreShort)
-    string poiStr       = "OB: " + str.tostring(array.size(obList)) + " | FVG: " + str.tostring(array.size(fvgList)) + " | RVOL: " + str.tostring(rvol, "#.##") + "x"
+    table.cell(dash, 0, 0, "SMC · WYCKOFF", text_color = colDashTitle, bgcolor = colDashHead, text_halign = text.align_center, text_size = dashSz)
 
-    table.cell(dash, 0, 0, "SMC + WYCKOFF ENGINE", text_color = color.white, bgcolor = bgHeader, text_halign = text.align_center, text_size = size.small)
+    table.cell(dash, 0, 1, "Swing", text_color = colDashMuted, bgcolor = colDashBg, text_halign = text.align_left, text_size = dashSz)
+    table.cell(dash, 1, 1, f_trendLabel(swingTrend), text_color = swingCol, bgcolor = colDashBg, text_halign = text.align_right, text_size = dashSz)
 
-    table.cell(dash, 0, 1, "Tendencia Swing", text_color = txtMuted, bgcolor = bgCell, text_halign = text.align_left, text_size = size.small)
-    table.cell(dash, 1, 1, f_trendLabel(swingTrend), text_color = swingCol, bgcolor = bgCell, text_halign = text.align_right, text_size = size.small)
+    table.cell(dash, 0, 2, "Interna", text_color = colDashMuted, bgcolor = colDashBg, text_halign = text.align_left, text_size = dashSz)
+    table.cell(dash, 1, 2, f_trendLabel(intTrend), text_color = intCol, bgcolor = colDashBg, text_halign = text.align_right, text_size = dashSz)
 
-    table.cell(dash, 0, 2, "Tendencia Interna", text_color = txtMuted, bgcolor = bgCell, text_halign = text.align_left, text_size = size.small)
-    table.cell(dash, 1, 2, f_trendLabel(intTrend), text_color = intCol, bgcolor = bgCell, text_halign = text.align_right, text_size = size.small)
+    table.cell(dash, 0, 3, "Zona", text_color = colDashMuted, bgcolor = colDashBg, text_halign = text.align_left, text_size = dashSz)
+    table.cell(dash, 1, 3, zoneTxt, text_color = zoneCol, bgcolor = colDashBg, text_halign = text.align_right, text_size = dashSz)
 
-    table.cell(dash, 0, 3, "Zona Actual", text_color = txtMuted, bgcolor = bgCell, text_halign = text.align_left, text_size = size.small)
-    table.cell(dash, 1, 3, zoneTxt, text_color = zoneCol, bgcolor = bgCell, text_halign = text.align_right, text_size = size.small)
+    table.cell(dash, 0, 4, "Wyckoff", text_color = colDashMuted, bgcolor = colDashBg, text_halign = text.align_left, text_size = dashSz)
+    table.cell(dash, 1, 4, wyckTxt, text_color = wyckCol, bgcolor = colDashBg, text_halign = text.align_right, text_size = dashSz)
 
-    table.cell(dash, 0, 4, "Estado Wyckoff", text_color = txtMuted, bgcolor = bgCell, text_halign = text.align_left, text_size = size.small)
-    table.cell(dash, 1, 4, wyckTxt, text_color = wyckCol, bgcolor = bgCell, text_halign = text.align_right, text_size = size.small)
+    table.cell(dash, 0, 5, "Último A+", text_color = colDashMuted, bgcolor = colDashBg, text_halign = text.align_left, text_size = dashSz)
+    table.cell(dash, 1, 5, lastScoreStr, text_color = scoreCol, bgcolor = colDashBg, text_halign = text.align_right, text_size = dashSz)
 
-    table.cell(dash, 0, 5, "Último Score A+", text_color = txtMuted, bgcolor = bgCell, text_halign = text.align_left, text_size = size.small)
-    table.cell(dash, 1, 5, lastScoreStr, text_color = scoreCol, bgcolor = bgCell, text_halign = text.align_right, text_size = size.small)
+    table.cell(dash, 0, 6, "Score Vivo", text_color = colDashMuted, bgcolor = colDashBg, text_halign = text.align_left, text_size = dashSz)
+    table.cell(dash, 1, 6, liveScoreStr, text_color = colDashVal, bgcolor = colDashBg, text_halign = text.align_right, text_size = dashSz)
 
-    table.cell(dash, 0, 6, "Score Vivo (L / S)", text_color = txtMuted, bgcolor = bgCell, text_halign = text.align_left, text_size = size.small)
-    table.cell(dash, 1, 6, liveScoreStr, text_color = color.white, bgcolor = bgCell, text_halign = text.align_right, text_size = size.small)
-
-    table.cell(dash, 0, 7, "POIs / Volumen", text_color = txtMuted, bgcolor = bgCell, text_halign = text.align_left, text_size = size.small)
-    table.cell(dash, 1, 7, poiStr, text_color = txtMuted, bgcolor = bgCell, text_halign = text.align_right, text_size = size.small)
+    table.cell(dash, 0, 7, "POIs · RVOL", text_color = colDashMuted, bgcolor = colDashBg, text_halign = text.align_left, text_size = dashSz)
+    table.cell(dash, 1, 7, poiStr, text_color = colDashMuted, bgcolor = colDashBg, text_halign = text.align_right, text_size = dashSz)
 
 // =============================================================================
 // 9. ALERTAS (ÁMBITO GLOBAL — ANTI-REPINTADO GARANTIZADO)
