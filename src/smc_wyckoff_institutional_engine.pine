@@ -408,7 +408,7 @@ if barstate.isconfirmed
     if not na(swingPH)
         int pivBar = bar_index - i_swingLen
         if i_showEQ and eqTol > 0.0 and array.size(swingHighs) > 0
-            for i = array.size(swingHighs) - 1 to 0 by -1
+            for i = array.size(swingHighs) - 1 to 0
                 SwingPoint prev = array.get(swingHighs, i)
                 if not prev.broken and not prev.swept and math.abs(swingPH - prev.price) <= eqTol
                     if not f_eqExistsNear(eqLevels, swingPH, true, eqTol)
@@ -432,7 +432,7 @@ if barstate.isconfirmed
     if not na(swingPL)
         int pivBar = bar_index - i_swingLen
         if i_showEQ and eqTol > 0.0 and array.size(swingLows) > 0
-            for i = array.size(swingLows) - 1 to 0 by -1
+            for i = array.size(swingLows) - 1 to 0
                 SwingPoint prev = array.get(swingLows, i)
                 if not prev.broken and not prev.swept and math.abs(swingPL - prev.price) <= eqTol
                     if not f_eqExistsNear(eqLevels, swingPL, false, eqTol)
@@ -456,7 +456,7 @@ if barstate.isconfirmed
     if not na(intPH)
         int pivBar = bar_index - i_intLen
         if i_showEQ and eqTol > 0.0 and array.size(intHighs) > 0
-            for i = array.size(intHighs) - 1 to 0 by -1
+            for i = array.size(intHighs) - 1 to 0
                 SwingPoint prev = array.get(intHighs, i)
                 if not prev.broken and not prev.swept and (pivBar - prev.barIdx) >= i_intLen and math.abs(intPH - prev.price) <= eqTol
                     if not f_eqExistsNear(eqLevels, intPH, true, eqTol)
@@ -480,7 +480,7 @@ if barstate.isconfirmed
     if not na(intPL)
         int pivBar = bar_index - i_intLen
         if i_showEQ and eqTol > 0.0 and array.size(intLows) > 0
-            for i = array.size(intLows) - 1 to 0 by -1
+            for i = array.size(intLows) - 1 to 0
                 SwingPoint prev = array.get(intLows, i)
                 if not prev.broken and not prev.swept and (pivBar - prev.barIdx) >= i_intLen and math.abs(intPL - prev.price) <= eqTol
                     if not f_eqExistsNear(eqLevels, intPL, false, eqTol)
@@ -506,7 +506,7 @@ if barstate.isconfirmed
 
     // Barrido sobre EQH / EQL
     if array.size(eqLevels) > 0
-        for i = array.size(eqLevels) - 1 to 0 by -1
+        for i = array.size(eqLevels) - 1 to 0
             EqualLevel eq = array.get(eqLevels, i)
             if not eq.swept
                 if eq.isHigh
@@ -530,7 +530,7 @@ if barstate.isconfirmed
 
     // Barrido sobre Swing Highs previos
     if array.size(swingHighs) > 0
-        for i = array.size(swingHighs) - 1 to 0 by -1
+        for i = array.size(swingHighs) - 1 to 0
             SwingPoint sp = array.get(swingHighs, i)
             if not sp.broken and not sp.swept and bar_index > sp.barIdx
                 if high > sp.price and close < sp.price
@@ -540,7 +540,7 @@ if barstate.isconfirmed
 
     // Barrido sobre Swing Lows previos
     if array.size(swingLows) > 0
-        for i = array.size(swingLows) - 1 to 0 by -1
+        for i = array.size(swingLows) - 1 to 0
             SwingPoint sp = array.get(swingLows, i)
             if not sp.broken and not sp.swept and bar_index > sp.barIdx
                 if low < sp.price and close > sp.price
@@ -818,7 +818,7 @@ if barstate.isconfirmed
 
     // Actualizar / mitigar / convertir a Breaker los Order Blocks activos
     if array.size(obList) > 0
-        for i = array.size(obList) - 1 to 0 by -1
+        for i = array.size(obList) - 1 to 0
             OrderBlock ob = array.get(obList, i)
             if bar_index > ob.originBar
                 if not na(ob.boxId)
@@ -904,7 +904,7 @@ if barstate.isconfirmed
 
     // Actualizar, recortar o eliminar FVGs rellenados
     if array.size(fvgList) > 0
-        for i = array.size(fvgList) - 1 to 0 by -1
+        for i = array.size(fvgList) - 1 to 0
             FVG f = array.get(fvgList, i)
             if bar_index > f.originBar + 1
                 if not na(f.boxId)

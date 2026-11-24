@@ -115,6 +115,10 @@ def validate_file(path: Path) -> tuple[list[str], list[str]]:
         if indent > 0 and re.match(r"^(alertcondition|plotshape|plot|bgcolor|hline)\s*\(", stripped):
             errors.append(f"Line {lineno}: Global-only call `{stripped.split('(')[0]}()` is indented.")
 
+        # Check `for` loop negative `by` step (Pine Script requires step > 0; countdown is automatic when from > to)
+        if re.search(r"\bfor\s+.*\bby\s*-", stripped):
+            errors.append(f"Line {lineno}: Pine Script forbids negative `by` step in `for` loops; omit `by` for automatic countdown.")
+
         # Check `for i = array.size(...) - 1 to 0` has guard above
         if re.search(r"\bfor\s+\w+\s*=\s*array\.size\(", stripped):
             prev_line = strip_comment(raw_lines[lineno - 2]).strip() if lineno >= 2 else ""
