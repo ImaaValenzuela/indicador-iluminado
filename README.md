@@ -37,15 +37,23 @@
 
 ```text
 .
-├── README.md                                 # Documentación completa del proyecto
+├── README.md                                 # Resumen técnico e instalación
 ├── .gitignore                                # Exclusiones de Git
 ├── docs/
+│   ├── README.md                             # Índice maestro de la Guía Educativa
+│   ├── 01-estructura-de-mercado-smc.md       # Módulo 1: Pivotes, BOS, CHoCH, MSS, P/D
+│   ├── 02-liquidez-y-pois.md                 # Módulo 2: BSL/SSL, EQH/EQL, Sweeps, OB, Breaker, FVG
+│   ├── 03-wyckoff-y-vsa.md                   # Módulo 3: Leyes Wyckoff, VSA, TR y Eventos
+│   ├── 04-confluencia-y-motor-aplicado.md    # Módulo 4 (Recap): Scoring 0-100, Dashboard y Playbook
+│   ├── glosario.md                           # Glosario rápido A–Z
 │   └── SPEC.md                               # Especificación técnica original
 ├── src/
 │   └── smc_wyckoff_institutional_engine.pine # Indicador completo en Pine Script v6
 └── scripts/
     └── validate_pine_v6.py                   # Validador estático de sintaxis v6 y SPEC
 ```
+
+> **¿Querés aprender a fondo todos los conceptos teóricos y cómo se aplican paso a paso en el indicador?** Empezá por la **[Guía Educativa Completa (`docs/README.md`)](./docs/README.md)**.
 
 ---
 
