@@ -88,10 +88,30 @@ El indicador está diseñado para convivir en armonía sobre un **gráfico blanc
 | **Sombreado ultra tenue + línea `50%`** | Tinte 96–97% sin bordes + punteada central | Rango `Premium` (arriba), `50%` (equilibrio), `Discount` (abajo). |
 | **Línea punteada `$$$ EQH` / `$$$ EQL`** | Gris punteado fino | Pools de liquidez (stops acumulados). |
 | **Marca `×` sobre/bajo la mecha** | Cruz diminuta sin caja (tooltip con detalle) | Liquidity Sweep confirmado al cierre. |
-| **Caja punteada con bordes discontinuos** | Tinte gris 96% | Trading Range activo de Wyckoff. |
+| **Caja punteada `ACUMULACIÓN · Fase X` / `DISTRIBUCIÓN · Fase X`** | Tinte gris 96% + separadores verticales punteados `Fase A–E` | Trading Range activo de Wyckoff indicando tipo y fase exacta en cada tramo. |
 | **Texto micro `SC`, `BC`, `AR`, `ST`, `SPRING`, `UTAD`, `SOS`, `SOW`, `LPS`, `LPSY`** | Tipografía limpia sin fondo fuera de las mechas | Eventos de la máquina de estados Wyckoff (negro para alta prioridad, gris para contexto). |
 | **Punto diminuto debajo/encima de vela** | Círculo micro gris carbón | Anomalía de Absorción VSA (`RVOL > 1.8`). |
-| **Píldora negra `A+ LONG · XX` / grafito `A+ SHORT · XX`** | Único elemento con relleno sólido de alto contraste | Señal final de alta confluencia (`Score >= umbral`). |
+| **Marca direccional `▲ LONG` / `▼ SHORT`** | Tipografía limpia sin fondo (`Score >= 50` + evento confirmatorio) | Señal direccional secundaria para identificar rápidamente dónde fue Long/Short. |
+| **Píldora negra `A+ LONG · XX` / grafito `A+ SHORT · XX`** | Único elemento con relleno sólido de alto contraste | Señal institucional máxima (`Score >= 75`). |
+| **Modo Sombra (trayectoria punteada + cono gris translúcido)** | Proyección futura a la derecha de la última vela (`barstate.islast`) | Escenario estimado de comportamiento futuro según las últimas velas, Wyckoff y POIs. |
+
+### 4B. Cómo Funciona el Modo Sombra (Proyección Futura Estimada)
+
+El **Modo Sombra** proyecta una trayectoria estimada de 3 tramos (`P0 → P1 → P2 → P3`) rodeada por un **cono gris translúcido** (amplitud creciente basada en `ATR(14)`) exclusivamente hacia el futuro (`bar_index + 1` en adelante) en `barstate.islast`, manteniendo **0% repintado** sobre el historial.
+
+¿Cómo estima el posible comportamiento futuro a partir de las velas?
+1. **Si hay un Trading Range Wyckoff activo (`ACUMULACIÓN` o `DISTRIBUCIÓN`):** sigue la hoja de ruta clásica de la fase vigente:
+   - **Fase A / B:** proyecta testeo/barrido del extremo (`Spring` o `UTAD`) y posterior rotación hacia el borde opuesto (`SOS`/`SOW`).
+   - **Fase C (`Spring` / `UTAD`):** proyecta recorrido a través del rango hacia la ruptura `SOS`/`SOW`.
+   - **Fase D (`SOS` / `SOW`):** proyecta un retroceso controlado (`LPS`/`LPSY`) al borde roto del TR seguido de expansión por *Ley de Causa y Efecto* (`+1.0 × altura del TR`).
+   - **Fase E (`LPS` / `LPSY`):** proyecta continuación directa de la tendencia (*Markup* / *Markdown*).
+2. **Si el mercado está en tendencia (sin TR activo):** combina 4 factores cuantitativos en tiempo real:
+   - **Presión VSA de las últimas `N` velas** (`i_ghostLookback`, default `10`): cuerpo neto `(close - open)/rango` (65%) + balance de rechazos de mechas `(lowerWick - upperWick)/rango` (35%), ponderado por volumen relativo (`RVOL`).
+   - **Velocidad de cierre reciente:** pendiente promedio `(close - close[N]) / N`.
+   - **Estructura SMC + Score Vivo:** alineación de `Tendencia Swing`, `Tendencia Interna` y diferencia `Score Long - Score Short`.
+   - **POIs sin mitigar cercanos (`OB`/`FVG`):** si existe un `OB` o `FVG` fresco a favor de la tendencia dentro de `3 × ATR`, la sombra proyecta primero un **pullback hacia ese POI** (`P1`) y luego el giro hacia el próximo objetivo estructural (`P2 → P3`).
+
+> **Importante:** El Modo Sombra es una **estimación estadística/estructural de escenario más probable** basada en la información disponible hasta la última vela, nunca una predicción garantizada. Pasá el cursor sobre la etiqueta al final de la flecha para ver el puntaje de sesgo, la presión de velas y el precio objetivo estimado.
 
 *(Si preferís ver micro-etiquetas `OB+`/`FVG+`/`TR` dentro de cada caja, activá **Mostrar Etiquetas dentro de Cajas** en el Grupo 0. Si preferís ver acentos verde pino/borgoña muy sobrios, cambiá el tema a **Minimal Light (Acento Sutil)**.)*
 

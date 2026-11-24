@@ -232,8 +232,9 @@ Ubicado en la esquina superior derecha del gráfico (actualizado únicamente en 
 | **Tendencia Interna** | `Alcista` / `Bajista` / `Neutral` |
 | **Zona Actual** | `Premium` / `Discount` / `Equilibrium` / `N/A` |
 | **Estado Wyckoff** | `Tendencia`, `Clímax (SC/BC)`, `En Rango (Acum./Dist.)`, `Secondary Test (ST)`, `Spring`/`UTAD`, `SOS`/`SOW`, `LPS`/`LPSY` |
-| **Último Score A+** | Puntaje y dirección de la última señal A+ confirmada (ej. `85 / 100 (LONG)`) |
-| **Score Vivo (L / S)** | Puntaje en tiempo real actual para ambos sesgos (`L: XX \| S: YY`) |
+| **Último Score A+** | Puntaje y dirección de la última señal A+ confirmada (ej. `85 / 100 · LONG`) |
+| **Score Vivo (L / S)** | Puntaje en tiempo real actual para ambos sesgos (`L XX · S YY`) |
+| **Modo Sombra** | Escenario estimado futuro (`Est. Alcista`, `Est. Bajista`, `Alcista (Spring)`, `Rango Neutral`, etc.) |
 | **POIs / Volumen** | Conteo de `OB` y `FVG` activos sin mitigar + `RVOL` de la vela actual |
 
 ---
@@ -347,6 +348,18 @@ A+ LONG | BTCUSDT (15) | Score: 85/100 @ 91420.5
 | Máx. Etiquetas Señal A+ | `30` | Límite dinámico de etiquetas de señal |
 | Mostrar Dashboard Institucional | `true` | Activa/oculta la tabla en esquina superior derecha |
 | Activar `alert()` Dinámicas con Puntaje | `false` | Emite alertas dinámicas con score exacto para webhooks/bots |
+
+</details>
+
+<details>
+<summary><strong>5. Modo Sombra (Proyección Futura Estimada)</strong> (clic para expandir)</summary>
+
+| Parámetro | Default | Descripción |
+|---|---|---|
+| Activar Modo Sombra (Proyección Futura) | `true` | Proyecta trayectoria estimada punteada hacia el futuro en `barstate.islast` (0 repintado) |
+| Velas Recientes Analizadas (Momentum/VSA) | `10` | Cantidad de velas usadas para calcular presión de cuerpos, rechazo de mechas y velocidad |
+| Horizonte de Proyección (Velas Futuras) | `15` | Cuántas velas hacia la derecha se proyecta la trayectoria estimada |
+| Mostrar Cono de Sombra (Volatilidad ATR) | `true` | Dibuja banda translúcida de incertidumbre proporcional al `ATR(14)` |
 
 </details>
 
