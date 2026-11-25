@@ -11,10 +11,11 @@ __pycache__/
 *.pyc
 .pytest_cache/
 
-# Node / Vite frontend
+# Node / Vite frontend & Vercel
 node_modules/
 web/dist/
 web/.vite/
+.vercel/
 
 # Exports / temporary charts
 exports/
