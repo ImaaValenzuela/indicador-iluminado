@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Soria";
+  src: url("/fonts/soria-font.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vercetti";
+  src: url("/fonts/Vercetti-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-serif: "Soria", Georgia, serif;
+  --font-sans: "Vercetti", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+:root {
+  --bg: #ffffff;
+  --surface: #f7f7f8;
+  --surface-strong: #efeff1;
+  --ink: #111318;
+  --muted: #6b7280;
+  --subtle: #9ca3af;
+  --border: #e5e7eb;
+  --imbalance: rgba(156, 163, 175, 0.24);
+  --imbalance-border: rgba(107, 114, 128, 0.42);
+  --accent: #0690d4;
+  --accent-soft: rgba(6, 144, 212, 0.08);
+  --bull: #111318;
+  --bear: #52525b;
+  --pill-bg: #111318;
+  --pill-ink: #ffffff;
+}
+
+[data-theme="dark"] {
+  --bg: #0a0a0a;
+  --surface: #121316;
+  --surface-strong: #1b1d22;
+  --ink: #ededed;
+  --muted: #8b949e;
+  --subtle: #525964;
+  --border: #23262d;
+  --imbalance: rgba(156, 163, 175, 0.16);
+  --imbalance-border: rgba(156, 163, 175, 0.34);
+  --accent: #0690d4;
+  --accent-soft: rgba(6, 144, 212, 0.14);
+  --bull: #ededed;
+  --bear: #9ca3af;
+  --pill-bg: #ededed;
+  --pill-ink: #0a0a0a;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--ink);
+  overflow-x: hidden;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+::selection {
+  background-color: var(--ink);
+  color: var(--bg);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--subtle);
+}
+
+.font-display {
+  font-family: var(--font-serif);
+  letter-spacing: 0.015em;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.hairline {
+  border-color: var(--border);
+}
+
+.surface-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.imbalance-box {
+  background-color: var(--imbalance);
+  border: 1px solid var(--imbalance-border);
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

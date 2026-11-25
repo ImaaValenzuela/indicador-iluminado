@@ -49,11 +49,16 @@
 │   └── SPEC.md                               # Especificación técnica original
 ├── src/
 │   └── smc_wyckoff_institutional_engine.pine # Indicador completo en Pine Script v6
+├── web/                                      # Plataforma E-Learning (Vite + React + TS + GSAP)
 └── scripts/
     └── validate_pine_v6.py                   # Validador estático de sintaxis v6 y SPEC
 ```
 
-> **¿Querés aprender a fondo todos los conceptos teóricos y cómo se aplican paso a paso en el indicador?** Empezá por la **[Guía Educativa Completa (`docs/README.md`)](./docs/README.md)**.
+> **¿Querés aprender a fondo todos los conceptos teóricos y cómo se aplican paso a paso en el indicador?** Empezá por la **[Guía Educativa Completa (`docs/README.md`)](./docs/README.md)** o levantá la **Plataforma Interactiva E-Learning**:
+>
+> ```bash
+> cd web && npm install && npm run dev
+> ```
 
 ---
 
